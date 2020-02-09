@@ -1,7 +1,7 @@
 # Flutter bloc login example
 A organized project base providing a login workflow using Flutter Bloc. 
 
-## Utilties in this project
+## Utilties 
  - Screens Login, ForgotPasword and SignUp designed by https://www.instagram.com/iza.dsgn/
  - Shared contains:
     - locator: Useful for dependece injection usage
@@ -12,3 +12,7 @@ A organized project base providing a login workflow using Flutter Bloc.
  ## Setup 
  
  - Make sure you had followed steps of flutter installation (https://flutter.dev/docs/get-started/install) and you can reproduce the simple counter example by typing this command : ```flutter create <name-your-poject>```
+
+ - After clone the projetct you should execute ```flutter run``` in yout root project folder.  
+ 
+ - That's All Folks!
