@@ -162,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   InkWell(
                     onTap: () => _signUp(),
                     child: Text(
-                      'signUp with your email',
+                      'SIGN UP with your email',
                       textAlign: TextAlign.right,
                       style: TextStylesLogin.textLink,
                     ),
@@ -183,19 +183,19 @@ class _LoginScreenState extends State<LoginScreen> {
           return ButtonLogin(
             isLoading: true,
             backgroundColor: Colors.white,
-            label: 'Login ...',
+            label: 'LOGIN ...',
             mOnPressed: () => {},
           );
         } else if (state is LogedState) {
           return ButtonLogin(
             backgroundColor: Colors.white,
-            label: 'Conected!',
+            label: 'CONECTED!',
             mOnPressed: () => {},
           );
         } else {
           return ButtonLogin(
             backgroundColor: Colors.white,
-            label: 'SignIn',
+            label: 'SIGN IN',
             mOnPressed: () => _login(),
           );
         }
