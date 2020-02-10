@@ -15,6 +15,6 @@ A organized project example providing a login workflow using Flutter Bloc.
 
  - After clone this projetct you should execute ```flutter run``` in root project folder.  
  
- - To generate icon to andorid and ios , type ```flutter pub run flutter_launcher_icons:main```  (https://pub.dev/packages/flutter_launcher_icons) 
+ - To generate icon to andorid and ios , use ```flutter pub run flutter_launcher_icons:main```  (https://pub.dev/packages/flutter_launcher_icons) 
  
  - That's All Folks!
