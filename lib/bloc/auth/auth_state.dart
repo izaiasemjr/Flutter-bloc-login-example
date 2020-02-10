@@ -23,3 +23,9 @@ class LoadingForgotPasswordState extends AuthState {}
 class LoadedForgotPasswordState extends AuthState {}
 
 class ErrorForgotPasswordState extends AuthState {}
+
+class LoadingResendCodeState extends AuthState {}
+
+class LoadedResendCodeState extends AuthState {}
+
+class ErrorResendCodeState extends AuthState {}

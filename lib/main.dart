@@ -21,7 +21,7 @@ class Application extends StatelessWidget {
       child: MaterialApp(
         color: Colors.white,
         debugShowCheckedModeBanner: false,
-        title: 'AWS Cogntio Bloc Demo',
+        title: 'Bloc Login Demo',
         home: FirstScreen(),
       ),
     );

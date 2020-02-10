@@ -46,6 +46,12 @@ class BlocAuth extends Bloc<AuthEvent, AuthState> {
         await Locator.instance.get<ApiAuth>().changePassword();
 
         yield LoadedForgotPasswordState();
+      } else if (event is ResendCodeEvent) {
+        yield LoadingResendCodeState();
+
+        await Locator.instance.get<ApiAuth>().resendCode(email: event.email);
+
+        yield LoadedResendCodeState();
       } else {
         yield UnlogedState();
       }

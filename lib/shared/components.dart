@@ -7,7 +7,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 class InputLogin extends StatefulWidget {
   InputLogin({
     this.prefixIcon,
-    this.label,
     this.hint,
     this.keyboardType,
     this.obscureText = false,
@@ -18,7 +17,6 @@ class InputLogin extends StatefulWidget {
   final focusNode;
   final validator;
   final prefixIcon;
-  final label;
   final hint;
   final keyboardType;
   final textEditingController;
@@ -34,12 +32,12 @@ class _InputLoginState extends State<InputLogin> {
   String _validator(value) {
     if (widget.obscureText) {
       if (value == null || value.isEmpty) {
-        return 'type a ${widget.label}';
+        return 'type a ${widget.hint}';
       }
       return null;
     } else {
       if (value == null || value.isEmpty) {
-        return 'type a ${widget.label}';
+        return 'type a ${widget.hint}';
       }
       return null;
     }

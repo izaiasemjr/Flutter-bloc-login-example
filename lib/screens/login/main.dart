@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
         builder: (context) => Alert(
           titleText: 'Alert',
           contentText:
-              'Please type a Valid Email in login field to change your password.',
+              'Please type a valid Email in login field to change your password.',
         ),
       );
   }
@@ -67,8 +67,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    loginController.text = 'izaiasemjr@gmail.com';
-    passController.text = 'junymqwe';
+    loginController.text = '';
+    passController.text = '';
   }
 
   @override
@@ -162,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   InkWell(
                     onTap: () => _signUp(),
                     child: Text(
-                      'Inscreva-se pelo email ',
+                      'signUp with your email',
                       textAlign: TextAlign.right,
                       style: TextStylesLogin.textLink,
                     ),
@@ -183,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
           return ButtonLogin(
             isLoading: true,
             backgroundColor: Colors.white,
-            label: 'Loading ...',
+            label: 'Login ...',
             mOnPressed: () => {},
           );
         } else if (state is LogedState) {
@@ -195,7 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
         } else {
           return ButtonLogin(
             backgroundColor: Colors.white,
-            label: 'Login',
+            label: 'SignIn',
             mOnPressed: () => _login(),
           );
         }

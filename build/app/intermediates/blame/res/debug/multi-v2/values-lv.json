@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/home/izaiasjr/Documentos/TRABALHOS PESSOAIS/github/flutter_bloc_login_example/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-lv/values-lv.xml",
+            "outputFile": "/home/izaiasjr/Documentos/TRABALHOS PESSOAIS/github/Flutter-bloc-login-example/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-lv/values-lv.xml",
             "map": [
                 {
                     "source": "/home/izaiasjr/.gradle/caches/transforms-2/files-2.1/0a271e99b6771ad4a84318244d532fb7/core-1.0.0/res/values-lv/values-lv.xml",

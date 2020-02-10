@@ -46,7 +46,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       backgroundColor: ColorsCustom.loginScreenMiddle,
       appBar: new AppBar(
-        title: new Text('Cadastro'),
+        title: new Text('SignUp'),
         backgroundColor: ColorsCustom.loginScreenMiddle,
       ),
       body: Form(
@@ -59,16 +59,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
               InputLogin(
                 validator: _validatorEmail,
                 prefixIcon: Icons.account_circle,
-                label: 'Email',
-                hint: 'seu email',
+                hint: 'email',
                 keyboardType: TextInputType.emailAddress,
                 textEditingController: emailController,
               ),
               SizedBox(height: 30.0),
               InputLogin(
                 prefixIcon: Icons.lock,
-                label: 'Senha',
-                hint: 'sua senha',
+                hint: 'senha',
                 obscureText: true,
                 textEditingController: passController,
               ),
@@ -86,7 +84,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       condition: (previusState, state) {
         if (state is LoadedSignUpState) {
           BlocProvider.of<BlocAuth>(context).add(ResetStateEvent());
-          Navigator.push(context, SlideRightRoute(page: LoginScreen()));
+          Navigator.pushReplacement(
+              context, SlideRightRoute(page: LoginScreen()));
         } else if (state is ErrorSignUpState) {
           AlertDialog(
             title: Text('Alert'),
@@ -100,7 +99,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           return ButtonLogin(
             isLoading: true,
             backgroundColor: Colors.white,
-            label: 'SignUp ...',
+            label: 'loading ...',
             mOnPressed: () => {},
           );
         } else if (state is LoadedSignUpState) {
@@ -112,7 +111,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         } else {
           return ButtonLogin(
             backgroundColor: Colors.white,
-            label: 'SignUp',
+            label: 'OK',
             mOnPressed: () => _signUp(),
           );
         }

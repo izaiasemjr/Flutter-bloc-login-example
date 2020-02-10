@@ -9,6 +9,7 @@ import 'package:flutter_bloc_login_example/shared/colors.dart';
 import 'package:flutter_bloc_login_example/shared/components.dart';
 import 'package:flutter_bloc_login_example/shared/screen_transitions/slide.transition.dart';
 import 'package:flutter_bloc_login_example/shared/styles.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   final email;
@@ -37,12 +38,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     }
   }
 
+  _resendCode() {
+    BlocProvider.of<BlocAuth>(context)
+        .add(ResendCodeEvent(email: widget.email));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorsCustom.loginScreenMiddle,
       appBar: new AppBar(
-        title: new Text('Forgot Password'),
+        title: new Text('Change Password'),
         backgroundColor: ColorsCustom.loginScreenMiddle,
       ),
       body: Form(
@@ -52,18 +58,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Text(
-                  "Verify the code sent to email ${widget.email}",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                _textTitle(),
                 SizedBox(height: 30.0),
                 InputLogin(
                   prefixIcon: Icons.local_offer,
-                  label: 'Confirmation Code',
                   hint: 'Code',
                   keyboardType: TextInputType.number,
                   textEditingController: numConfirmationController,
@@ -71,7 +69,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 SizedBox(height: 30.0),
                 InputLogin(
                   prefixIcon: Icons.lock,
-                  label: 'Password',
                   hint: 'new password',
                   obscureText: true,
                   textEditingController: newPassController,
@@ -80,7 +77,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 _buttonSignUp(),
                 SizedBox(height: 10.0),
                 InkWell(
-                  onTap: () => _forgotPassword(),
+                  onTap: () => _resendCode(),
                   child: Text(
                     'Resend Code',
                     textAlign: TextAlign.center,
@@ -95,12 +92,50 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
   }
 
+  Widget _textTitle() {
+    return BlocBuilder<BlocAuth, AuthState>(
+      builder: (previusState, state) {
+        if (state is LoadingResendCodeState) {
+          return ListView(
+            shrinkWrap: true,
+            primary: false,
+            children: <Widget>[
+              SizedBox(
+                child: SpinKitWave(
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Resend code for ${widget.email} ...',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          );
+        } else
+          return Text(
+            "Verify the code sent to email ${widget.email}",
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          );
+      },
+    );
+  }
+
   Widget _buttonSignUp() {
     return BlocBuilder<BlocAuth, AuthState>(
       condition: (previusState, state) {
         if (state is LoadedForgotPasswordState) {
           BlocProvider.of<BlocAuth>(context).add(ResetStateEvent());
-          Navigator.push(context, SlideDownRoute(page: LoginScreen()));
+          Navigator.pushReplacement(
+              context, SlideDownRoute(page: LoginScreen()));
         } else if (state is ErrorSignUpState) {
           AlertDialog(
             title: Text('Alert'),
@@ -120,13 +155,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         } else if (state is LoadedForgotPasswordState) {
           return ButtonLogin(
             backgroundColor: Colors.white,
-            label: 'Success',
+            label: 'Success!',
             mOnPressed: () => {},
           );
         } else {
           return ButtonLogin(
             backgroundColor: Colors.white,
-            label: 'Change Password',
+            label: 'OK',
             mOnPressed: () => _forgotPassword(),
           );
         }
