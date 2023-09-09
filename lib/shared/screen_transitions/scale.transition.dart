@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 
 class ScaleRoute extends PageRouteBuilder {
   final Widget page;
-  ScaleRoute({this.page})
+  ScaleRoute({required this.page})
       : super(
           pageBuilder: (
             BuildContext context,

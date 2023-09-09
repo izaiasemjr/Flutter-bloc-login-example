@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bloc_login_example/bloc/auth/auth_bloc.dart';
-import 'package:flutter_bloc_login_example/bloc/auth/auth_event.dart';
 import 'package:flutter_bloc_login_example/bloc/auth/auth_state.dart';
 import 'package:flutter_bloc_login_example/screens/login/main.dart';
 import 'package:flutter_bloc_login_example/shared/colors.dart';
@@ -10,8 +8,10 @@ import 'package:flutter_bloc_login_example/shared/screen_transitions/fade.transi
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -24,14 +24,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _logout() {
-    return BlocBuilder<BlocAuth, AuthState>(condition: (previousState, state) {
+    return BlocBuilder<BlocAuthCubit, AuthState>(
+        buildWhen: (previousState, state) {
       if (state is UnlogedState) {
-        Navigator.pushReplacement(context, FadeRoute(page: LoginScreen()));
+        Navigator.pushReplacement(
+            context, FadeRoute(page: const LoginScreen()));
       }
-      return;
+      return true;
     }, builder: (context, state) {
       if (state is LoadingLogoutState) {
-        return SizedBox(
+        return const SizedBox(
           child: SpinKitWave(
             color: Colors.white,
           ),
@@ -39,8 +41,8 @@ class _HomeScreenState extends State<HomeScreen> {
       }
       return Center(
         child: InkWell(
-          onTap: () => BlocProvider.of<BlocAuth>(context).add(LogoutEvent()),
-          child: Text(
+          onTap: () => context.read<BlocAuthCubit>().logoutEvent(),
+          child: const Text(
             "Logout",
             style: TextStyle(
                 fontSize: 26,

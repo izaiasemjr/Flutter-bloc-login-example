@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bloc_login_example/bloc/auth/auth_bloc.dart';
-import 'package:flutter_bloc_login_example/bloc/auth/auth_event.dart';
 import 'package:flutter_bloc_login_example/bloc/auth/auth_state.dart';
 import 'package:flutter_bloc_login_example/screens/login/main.dart';
 import 'package:flutter_bloc_login_example/shared/colors.dart';
@@ -12,12 +10,12 @@ import 'package:flutter_bloc_login_example/shared/styles.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
-  final email;
+  final String email;
 
-  const ForgotPasswordScreen({Key key, @required this.email}) : super(key: key);
+  const ForgotPasswordScreen({Key? key, required this.email}) : super(key: key);
 
   @override
-  _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
@@ -33,49 +31,48 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   _forgotPassword() {
-    if (_formKey.currentState.validate()) {
-      BlocProvider.of<BlocAuth>(context).add(ForgotPasswordEvent());
+    if (_formKey.currentState!.validate()) {
+      context.read<BlocAuthCubit>().forgotPasswordEvent();
     }
   }
 
   _resendCode() {
-    BlocProvider.of<BlocAuth>(context)
-        .add(ResendCodeEvent(email: widget.email));
+    context.read<BlocAuthCubit>().resendCodeEvent(email: widget.email);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorsCustom.loginScreenMiddle,
-      appBar: new AppBar(
-        title: new Text('Change Password'),
+      appBar: AppBar(
+        title: const Text('Change Password'),
         backgroundColor: ColorsCustom.loginScreenMiddle,
       ),
       body: Form(
         key: _formKey,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
                 _textTitle(),
-                SizedBox(height: 30.0),
+                const SizedBox(height: 30.0),
                 InputLogin(
                   prefixIcon: Icons.local_offer,
                   hint: 'Code',
                   keyboardType: TextInputType.number,
                   textEditingController: numConfirmationController,
                 ),
-                SizedBox(height: 30.0),
+                const SizedBox(height: 30.0),
                 InputLogin(
                   prefixIcon: Icons.lock,
                   hint: 'new password',
                   obscureText: true,
                   textEditingController: newPassController,
                 ),
-                SizedBox(height: 30.0),
+                const SizedBox(height: 30.0),
                 _buttonSignUp(),
-                SizedBox(height: 10.0),
+                const SizedBox(height: 10.0),
                 InkWell(
                   onTap: () => _resendCode(),
                   child: Text(
@@ -93,22 +90,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   Widget _textTitle() {
-    return BlocBuilder<BlocAuth, AuthState>(
+    return BlocBuilder<BlocAuthCubit, AuthState>(
       builder: (previusState, state) {
         if (state is LoadingResendCodeState) {
           return ListView(
             shrinkWrap: true,
             primary: false,
             children: <Widget>[
-              SizedBox(
+              const SizedBox(
                 child: SpinKitWave(
                   color: Colors.white,
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(
                 'Resend code for ${widget.email} ...',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 14,
                   color: Colors.white,
                 ),
@@ -116,33 +113,33 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
             ],
           );
-        } else
+        } else {
           return Text(
             "Verify the code sent to email ${widget.email}",
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 20,
               color: Colors.white,
             ),
             textAlign: TextAlign.center,
           );
+        }
       },
     );
   }
 
   Widget _buttonSignUp() {
-    return BlocBuilder<BlocAuth, AuthState>(
-      condition: (previusState, state) {
+    return BlocBuilder<BlocAuthCubit, AuthState>(
+      buildWhen: (previusState, state) {
         if (state is LoadedForgotPasswordState) {
-          BlocProvider.of<BlocAuth>(context).add(ResetStateEvent());
           Navigator.pushReplacement(
-              context, SlideDownRoute(page: LoginScreen()));
+              context, SlideDownRoute(page: const LoginScreen()));
         } else if (state is ErrorSignUpState) {
-          AlertDialog(
+          const AlertDialog(
             title: Text('Alert'),
             content: Text('Error on changing Password.'),
           );
         }
-        return;
+        return true;
       },
       builder: (context, state) {
         if (state is LoadingForgotPasswordState) {
@@ -150,19 +147,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             isLoading: true,
             backgroundColor: Colors.white,
             label: 'Loading ...',
-            mOnPressed: () => {},
+            onPressed: () => {},
           );
         } else if (state is LoadedForgotPasswordState) {
           return ButtonLogin(
             backgroundColor: Colors.white,
             label: 'Success!',
-            mOnPressed: () => {},
+            onPressed: () => {},
           );
         } else {
           return ButtonLogin(
             backgroundColor: Colors.white,
             label: 'OK',
-            mOnPressed: () => _forgotPassword(),
+            onPressed: () => _forgotPassword(),
           );
         }
       },

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class SlideUpRoute extends PageRouteBuilder {
   final Widget page;
-  SlideUpRoute({this.page})
+  SlideUpRoute({required this.page})
       : super(
           pageBuilder: (
             BuildContext context,
@@ -28,7 +28,7 @@ class SlideUpRoute extends PageRouteBuilder {
 
 class SlideDownRoute extends PageRouteBuilder {
   final Widget page;
-  SlideDownRoute({this.page})
+  SlideDownRoute({required this.page})
       : super(
           pageBuilder: (
             BuildContext context,
@@ -54,7 +54,7 @@ class SlideDownRoute extends PageRouteBuilder {
 
 class SlideRightRoute extends PageRouteBuilder {
   final Widget page;
-  SlideRightRoute({this.page})
+  SlideRightRoute({required this.page})
       : super(
           pageBuilder: (
             BuildContext context,
@@ -80,7 +80,7 @@ class SlideRightRoute extends PageRouteBuilder {
 
 class SlideLeftRoute extends PageRouteBuilder {
   final Widget page;
-  SlideLeftRoute({this.page})
+  SlideLeftRoute({required this.page})
       : super(
           pageBuilder: (
             BuildContext context,

@@ -4,21 +4,22 @@ import 'package:flutter_bloc_login_example/bloc/auth/auth_bloc.dart';
 import 'package:flutter_bloc_login_example/screens/login/main.dart';
 import 'package:flutter_bloc_login_example/shared/locator.dart';
 
-import 'bloc/auth/auth_event.dart';
-
 void main() {
   Locator.setup();
-  runApp(Application());
+  runApp(const Application());
 }
 
 class Application extends StatelessWidget {
+  const Application({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<BlocAuth>(create: (BuildContext context) => BlocAuth()),
+        BlocProvider<BlocAuthCubit>(
+            create: (BuildContext context) => BlocAuthCubit()),
       ],
-      child: MaterialApp(
+      child: const MaterialApp(
         color: Colors.white,
         debugShowCheckedModeBanner: false,
         title: 'Bloc Login Demo',
@@ -29,19 +30,21 @@ class Application extends StatelessWidget {
 }
 
 class FirstScreen extends StatefulWidget {
+  const FirstScreen({super.key});
+
   @override
-  _FirstScreenState createState() => _FirstScreenState();
+  State<FirstScreen> createState() => _FirstScreenState();
 }
 
 class _FirstScreenState extends State<FirstScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<BlocAuth>(context).add(ForceLoginEvent());
+    context.read<BlocAuthCubit>().forceLoginEvent();
   }
 
   @override
   Widget build(BuildContext context) {
-    return LoginScreen();
+    return const LoginScreen();
   }
 }

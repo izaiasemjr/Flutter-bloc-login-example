@@ -1,36 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bloc_login_example/bloc/auth/auth_bloc.dart';
-import 'package:flutter_bloc_login_example/bloc/auth/auth_event.dart';
 import 'package:flutter_bloc_login_example/bloc/auth/auth_state.dart';
 import 'package:flutter_bloc_login_example/screens/home/main.dart';
-import 'package:flutter_bloc_login_example/screens/login/signUp.dart';
+import 'package:flutter_bloc_login_example/screens/login/sign_up.dart';
 import 'package:flutter_bloc_login_example/shared/colors.dart';
 import 'package:flutter_bloc_login_example/shared/components.dart';
 import 'package:flutter_bloc_login_example/shared/screen_transitions/slide.transition.dart';
 import 'package:flutter_bloc_login_example/shared/styles.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import 'forgotPassword.dart';
+import 'forgot_password.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({Key key}) : super(key: key);
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final loginController = TextEditingController();
   final passController = TextEditingController();
-  var size;
+  Size? size;
   final regExp = RegExp(
-      "^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\$");
+      "^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\$");
 
   _login() {
-    if (_formKey.currentState.validate()) {
-      BlocProvider.of<BlocAuth>(context).add(LoginEvent());
+    if (_formKey.currentState!.validate()) {
+      context.read<BlocAuthCubit>().loginEvent();
     }
   }
 
@@ -38,30 +37,31 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!regExp.hasMatch(value)) {
       return "type a valid email";
     }
-    return null;
+    return "";
   }
 
   _forgotPassword() {
-    if (regExp.hasMatch(loginController.text))
+    if (regExp.hasMatch(loginController.text)) {
       Navigator.push(
           context,
           SlideDownRoute(
               page: ForgotPasswordScreen(
             email: loginController.text,
           )));
-    else
+    } else {
       showDialog(
         context: context,
-        builder: (context) => Alert(
+        builder: (context) => const Alert(
           titleText: 'Alert',
           contentText:
               'Please type a valid Email in login field to change your password.',
         ),
       );
+    }
   }
 
   _signUp() {
-    Navigator.push(context, SlideLeftRoute(page: SignUpScreen()));
+    Navigator.push(context, SlideLeftRoute(page: const SignUpScreen()));
   }
 
   @override
@@ -86,15 +86,15 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: ColorsCustom.loginScreenUp,
       body: Column(
         children: <Widget>[
-          SizedBox(height: size.height * 0.0671),
-          Container(
-              height: size.height * 0.178,
-              width: size.width * 0.316,
+          SizedBox(height: (size?.height)! * 0.0671),
+          SizedBox(
+              height: (size?.height)! * (0.178),
+              width: (size?.width)! * 0.316,
               child: Image.asset(
-                'lib/assets/images/pebal.png',
+                'images/pebal.png',
                 fit: BoxFit.contain,
               )),
-          SizedBox(height: size.height * 0.085),
+          SizedBox(height: (size?.height)! * 0.085),
           Expanded(
             child: _formLogin(),
           ),
@@ -104,15 +104,16 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _formLogin() {
-    return BlocBuilder<BlocAuth, AuthState>(condition: (previousState, state) {
+    return BlocBuilder<BlocAuthCubit, AuthState>(
+        buildWhen: (previousState, state) {
       if (state is LogedState) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()));
       }
-      return;
+      return true;
     }, builder: (context, state) {
       if (state is ForcingLoginState) {
-        return SizedBox(
+        return const SizedBox(
           child: SpinKitWave(
             color: Colors.white,
           ),
@@ -121,11 +122,11 @@ class _LoginScreenState extends State<LoginScreen> {
         return Form(
           key: _formKey,
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   InputLogin(
                     validator: _validatorEmail,
                     prefixIcon: Icons.account_circle,
@@ -133,16 +134,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     keyboardType: TextInputType.emailAddress,
                     textEditingController: loginController,
                   ),
-                  SizedBox(height: size.height * 0.03),
+                  SizedBox(height: (size?.height)! * 0.03),
                   InputLogin(
                     prefixIcon: Icons.lock,
                     hint: 'Password',
                     obscureText: true,
                     textEditingController: passController,
                   ),
-                  SizedBox(height: size.height * 0.035),
+                  SizedBox(height: (size?.height)! * 0.035),
                   _buttonLogin(),
-                  SizedBox(height: size.height * 0.01),
+                  SizedBox(height: (size?.height)! * 0.01),
                   InkWell(
                     onTap: () => _forgotPassword(),
                     child: Text(
@@ -152,10 +153,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: size.height * 0.084),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: (size?.height)! * 0.084),
                     child: Divider(
-                      height: size.height * 0.14,
+                      height: (size?.height)! * 0.14,
                       color: Colors.white,
                     ),
                   ),
@@ -177,26 +178,26 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buttonLogin() {
-    return BlocBuilder<BlocAuth, AuthState>(
+    return BlocBuilder<BlocAuthCubit, AuthState>(
       builder: (context, state) {
         if (state is LoadingLoginState) {
           return ButtonLogin(
             isLoading: true,
             backgroundColor: Colors.white,
             label: 'LOGIN ...',
-            mOnPressed: () => {},
+            onPressed: () => {},
           );
         } else if (state is LogedState) {
           return ButtonLogin(
             backgroundColor: Colors.white,
             label: 'CONECTED!',
-            mOnPressed: () => {},
+            onPressed: () => {},
           );
         } else {
           return ButtonLogin(
             backgroundColor: Colors.white,
             label: 'SIGN IN',
-            mOnPressed: () => _login(),
+            onPressed: () => _login(),
           );
         }
       },
