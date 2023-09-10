@@ -13,7 +13,11 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'forgot_password.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  final String email;
+  const LoginScreen({
+    this.email = "",
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -27,47 +31,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final regExp = RegExp(
       "^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\$");
 
-  _login() {
-    if (_formKey.currentState!.validate()) {
-      context.read<BlocAuthCubit>().loginEvent();
-    }
-  }
-
-  String _validatorEmail(value) {
-    if (!regExp.hasMatch(value)) {
-      return "type a valid email";
-    }
-    return "";
-  }
-
-  _forgotPassword() {
-    if (regExp.hasMatch(loginController.text)) {
-      Navigator.push(
-          context,
-          SlideDownRoute(
-              page: ForgotPasswordScreen(
-            email: loginController.text,
-          )));
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => const Alert(
-          titleText: 'Alert',
-          contentText:
-              'Please type a valid Email in login field to change your password.',
-        ),
-      );
-    }
-  }
-
-  _signUp() {
-    Navigator.push(context, SlideLeftRoute(page: const SignUpScreen()));
-  }
-
   @override
   void initState() {
     super.initState();
-    loginController.text = '';
+    loginController.text = widget.email;
     passController.text = '';
   }
 
@@ -101,6 +68,48 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
     );
+  }
+
+  _login() {
+    if (_formKey.currentState!.validate()) {
+      context.read<BlocAuthCubit>().loginEvent();
+    }
+  }
+
+  String? _validatorEmail(value) {
+    if (!regExp.hasMatch(value)) {
+      return "type a valid email";
+    }
+    return null;
+  }
+
+  _forgotPassword() {
+    if (regExp.hasMatch(loginController.text)) {
+      Navigator.push(
+          context,
+          SlideDownRoute(
+              page: ForgotPasswordScreen(
+            email: loginController.text,
+          )));
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => const Alert(
+          titleText: 'Alert',
+          contentText:
+              'Please type a valid Email in login field to change your password.',
+        ),
+      );
+    }
+  }
+
+  _signUp() {
+    Navigator.push(
+        context,
+        SlideLeftRoute(
+            page: SignUpScreen(
+          email: loginController.text,
+        )));
   }
 
   Widget _formLogin() {
@@ -189,13 +198,13 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         } else if (state is LogedState) {
           return ButtonLogin(
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.white70,
             label: 'CONECTED!',
             onPressed: () => {},
           );
         } else {
           return ButtonLogin(
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.white70,
             label: 'SIGN IN',
             onPressed: () => _login(),
           );

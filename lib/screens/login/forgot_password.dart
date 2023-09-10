@@ -131,8 +131,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return BlocBuilder<BlocAuthCubit, AuthState>(
       buildWhen: (previusState, state) {
         if (state is LoadedForgotPasswordState) {
+          context.read<BlocAuthCubit>().resetStateEvent();
           Navigator.pushReplacement(
-              context, SlideDownRoute(page: const LoginScreen()));
+              context, SlideDownRoute(page: LoginScreen(email: widget.email)));
         } else if (state is ErrorSignUpState) {
           const AlertDialog(
             title: Text('Alert'),

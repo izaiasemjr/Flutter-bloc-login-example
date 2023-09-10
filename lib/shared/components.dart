@@ -29,17 +29,17 @@ class InputLogin extends StatefulWidget {
 class _InputLoginState extends State<InputLogin> {
   bool showPassword = false;
 
-  String _validator(value) {
+  String? _validator(value) {
     if (widget.obscureText) {
       if (value == null || value.isEmpty) {
         return 'type a ${widget.hint}';
       }
-      return "";
+      return null;
     } else {
       if (value == null || value.isEmpty) {
         return 'type a ${widget.hint}';
       }
-      return "";
+      return null;
     }
   }
 
@@ -119,10 +119,95 @@ class ButtonLogin extends MaterialButton {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    // return SizedBox(
+    //   width: size.width * 0.316,
+    //   height: size.height * 0.053,
+    //   child: TextButton(
+    //     style: ButtonStyle(
+    //       backgroundColor:
+    //           MaterialStateProperty.all<Color>(ColorsCustom.loginScreenDown),
+    //       elevation: MaterialStateProperty.all(1),
+    //       shape: MaterialStateProperty.all(
+    //         RoundedRectangleBorder(
+    //           side: const BorderSide(color: Colors.white54),
+    //           borderRadius: BorderRadius.circular(15.0),
+    //         ),
+    //       ),
+    //     ),
+    //     onPressed: () {},
+    //     child: isLoading
+    //         ? FittedBox(
+    //             fit: BoxFit.cover,
+    //             child: Row(
+    //               children: <Widget>[
+    //                 Text(
+    //                   label,
+    //                   style: TextStyle(
+    //                       fontSize: 20.0,
+    //                       color: labelColor,
+    //                       fontWeight: FontWeight.bold),
+    //                 ),
+    //                 const SpinKitCircle(color: ColorsCustom.loginScreenUp),
+    //               ],
+    //             ),
+    //           )
+    //         : Text(
+    //             label,
+    //             style: TextStyle(
+    //                 fontSize: 20.0,
+    //                 color: labelColor,
+    //                 fontWeight: FontWeight.bold),
+    //           ),
+    //   ),
+    // );
     return ButtonTheme(
       minWidth: minWidth ?? size.width * 0.316,
       height: height ?? size.height * 0.053,
-      child: RaisedButton(
+      child:
+          // SizedBox(
+          //   width: size.width * 0.316,
+          //   height: size.height * 0.053,
+          //   child: TextButton(
+          //     style: ButtonStyle(
+          //       backgroundColor: MaterialStateProperty.all<Color>(
+          //           ColorsCustom.loginScreenDown),
+          //       elevation: MaterialStateProperty.all(1),
+          //       shape: MaterialStateProperty.all(
+          //         RoundedRectangleBorder(
+          //           side: const BorderSide(color: Colors.white54),
+          //           borderRadius: BorderRadius.circular(15.0),
+          //         ),
+          //       ),
+          //     ),
+          //     onPressed: () {},
+          //     child: isLoading
+          //         ? FittedBox(
+          //             fit: BoxFit.cover,
+          //             child: Row(
+          //               children: <Widget>[
+          //                 Text(
+          //                   label,
+          //                   style: TextStyle(
+          //                       fontSize: 20.0,
+          //                       color: labelColor,
+          //                       fontWeight: FontWeight.bold),
+          //                 ),
+          //                 const SpinKitCircle(color: ColorsCustom.loginScreenUp),
+          //               ],
+          //             ),
+          //           )
+          //         : Text(
+          //             label,
+          //             style: TextStyle(
+          //                 fontSize: 20.0,
+          //                 color: labelColor,
+          //                 fontWeight: FontWeight.bold),
+          //           ),
+          //   ),
+          // )
+
+          RaisedButton(
+        backgroundColor: backgroundColor,
         mElevation: 0.0,
         mShape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
@@ -179,9 +264,11 @@ class Alert extends AlertDialog {
 class RaisedButton extends MaterialButton {
   final RoundedRectangleBorder? mShape;
   final double? mElevation;
+  final Color backgroundColor;
 
   const RaisedButton({
     super.key,
+    this.backgroundColor = ColorsCustom.loginScreenUp,
     this.mElevation,
     this.mShape,
     required super.onPressed,
@@ -190,11 +277,11 @@ class RaisedButton extends MaterialButton {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return TextButton(
       onPressed: onPressed,
       style: ButtonStyle(
-        backgroundColor:
-            MaterialStateProperty.all<Color>(ColorsCustom.loginScreenMiddle),
+        foregroundColor: MaterialStateProperty.all<Color>(Colors.white60),
+        backgroundColor: MaterialStateProperty.all<Color>(backgroundColor),
         elevation: MaterialStateProperty.all(mElevation ?? 1),
         shape: MaterialStateProperty.all(mShape ??
             RoundedRectangleBorder(

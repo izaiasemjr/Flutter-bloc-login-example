@@ -127,4 +127,8 @@ class BlocAuthCubit extends Cubit<AuthState> {
       emit(LoginErrorState());
     }
   }
+
+  Future resetStateEvent() async {
+    emit(UnlogedState());
+  }
 }

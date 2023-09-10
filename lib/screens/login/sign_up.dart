@@ -8,7 +8,8 @@ import 'package:flutter_bloc_login_example/shared/components.dart';
 import 'package:flutter_bloc_login_example/shared/screen_transitions/slide.transition.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+  final String email;
+  const SignUpScreen({this.email = "", super.key});
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -20,25 +21,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    emailController.text = widget.email;
+    super.initState();
+  }
+
+  @override
   void dispose() {
-    super.dispose();
     emailController.dispose();
     passController.dispose();
-  }
-
-  String _validatorEmail(value) {
-    RegExp regExp = RegExp(
-        "^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\$");
-    if (!regExp.hasMatch(value)) {
-      return "type a valid email";
-    }
-    return "";
-  }
-
-  _signUp() {
-    if (_formKey.currentState!.validate()) {
-      context.read<BlocAuthCubit>().signUpEvent();
-    }
+    super.dispose();
   }
 
   @override
@@ -79,13 +71,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  String? _validatorEmail(value) {
+    RegExp regExp = RegExp(
+        "^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\$");
+    if (!regExp.hasMatch(value)) {
+      return "type a valid email";
+    }
+    return null;
+  }
+
+  _signUp() {
+    if (_formKey.currentState!.validate()) {
+      context.read<BlocAuthCubit>().signUpEvent();
+    }
+  }
+
   Widget _buttonSignUp() {
     return BlocBuilder<BlocAuthCubit, AuthState>(
       buildWhen: (previusState, state) {
         if (state is LoadedSignUpState) {
           // BlocProvider.of<BlocAuthCubit>(context).add(ResetStateEvent());
-          Navigator.pushReplacement(
-              context, SlideRightRoute(page: const LoginScreen()));
+          context.read<BlocAuthCubit>().resetStateEvent();
+          Navigator.pushReplacement(context,
+              SlideRightRoute(page: LoginScreen(email: emailController.text)));
         } else if (state is ErrorSignUpState) {
           const AlertDialog(
             title: Text('Alert'),
