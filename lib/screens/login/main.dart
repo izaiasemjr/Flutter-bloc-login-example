@@ -30,10 +30,12 @@ class _LoginScreenState extends State<LoginScreen> {
   Size? size;
   final regExp = RegExp(
       "^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\$");
+  double? paddingWidht = 0;
 
   @override
   void initState() {
     super.initState();
+
     loginController.text = widget.email;
     passController.text = '';
   }
@@ -46,26 +48,39 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void didChangeDependencies() {
     size = MediaQuery.of(context).size;
+    paddingWidht = MediaQueryData.fromWindow(WidgetsBinding.instance.window)
+                .size
+                .shortestSide <
+            900
+        ? 0
+        : (size?.width)! * 0.35;
+    super.didChangeDependencies();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorsCustom.loginScreenUp,
-      body: Column(
-        children: <Widget>[
-          SizedBox(height: (size?.height)! * 0.0671),
-          SizedBox(
-              height: (size?.height)! * (0.178),
-              width: (size?.width)! * 0.316,
-              child: Image.asset(
-                'images/pebal.png',
-                fit: BoxFit.contain,
-              )),
-          SizedBox(height: (size?.height)! * 0.085),
-          Expanded(
-            child: _formLogin(),
-          ),
-        ],
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: paddingWidht!),
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: (size?.height)! * 0.0671),
+            SizedBox(
+                height: (size?.height)! * (0.178),
+                width: (size?.width)! * 0.316,
+                child: Image.asset(
+                  'images/pebal.png',
+                  fit: BoxFit.contain,
+                )),
+            SizedBox(height: (size?.height)! * 0.085),
+            Expanded(
+              child: _formLogin(),
+            ),
+          ],
+        ),
       ),
     );
   }
